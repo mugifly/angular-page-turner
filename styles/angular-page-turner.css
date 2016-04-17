@@ -1,0 +1,79 @@
+/**
+ * angular-page-turner
+ * https://github.com/mugifly/angular-page-turner
+ * (C) 2016 - Masanori Ohgita; Released under MIT License.
+ */
+
+
+/**
+ * Container
+ */
+
+.page-turner {
+	position: relative;
+	height: 400px;
+	width: 800px;
+}
+
+
+/**
+ * Page
+ */
+
+.page-turner .page {
+	backface-visibility: hidden;
+	border: 1px solid #dddddd;
+	width: 50%;
+	height: 100%;
+	transform-style: preserve-3d;
+	position: absolute;
+	z-index: 100;
+}
+
+
+/**
+ * Page - Reversed
+ */
+
+.page-turner .left-reversed-page {
+	transform-origin: left !important;
+	transform: rotateY(-180deg) !important;
+	left: auto !important;
+}
+
+.page-turner .right-reversed-page {
+	transform-origin: right !important;
+	transform: rotateY(-180deg) !important;
+}
+
+
+/**
+ * Page - Left side
+ */
+
+.page-turner .left-page {
+	transform: rotateX(-3deg);
+	transform-origin: right;
+	left: 0px;
+}
+
+.page-turner .left-page:hover {
+	box-shadow: -2px 1px 1px 1px rgba(200, 200, 200, 0.3);
+	transform: rotateX(-3deg) rotateY(-10deg);
+}
+
+
+/**
+ * Page - Right side
+ */
+
+.page-turner .right-page {
+	transform: rotateX(3deg);
+	transform-origin: left;
+	right: 0px;
+}
+
+.page-turner .right-page:hover {
+	box-shadow: 2px 1px 1px 1px rgba(200, 200, 200, 0.3);
+	transform: rotateX(3deg) rotateY(-10deg);
+}

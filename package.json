@@ -1,0 +1,37 @@
+{
+  "name": "angular-page-turner",
+  "version": "0.1.0",
+  "description": "A simple page turner library for AngularJS v1",
+  "main": "scripts/angular-page-turner.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "grunt test",
+    "postinstall": "bower install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mugifly/angular-page-turner.git"
+  },
+  "keywords": [
+    "angular",
+    "angularjs"
+  ],
+  "author": "Masanori Ohgita (https://github.com/mugifly)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mugifly/angular-page-turner/issues"
+  },
+  "homepage": "https://github.com/mugifly/angular-page-turner",
+  "devDependencies": {
+    "eslint": "^2.8.0",
+    "grunt": "^1.0.1",
+    "eslint-config-angular": "^0.5.0",
+    "eslint-plugin-angular": "^1.0.0",
+    "grunt-npm2bower-sync": "^0.9.1",
+    "gruntify-eslint": "^2.0.0"
+  },
+  "dependencies": {
+  }
+}

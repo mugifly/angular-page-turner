@@ -1,0 +1,26 @@
+.page-turner {
+	height: 300px;
+	width: 800px;
+}
+
+.page {
+	color: #fefefe;
+	background-color: #aaaaaa;
+	text-align: center;
+}
+
+.red-page {
+	background-color: #e74c3c;
+}
+
+.green-page {
+	background-color: #27ae60;
+}
+
+.blue-page {
+	background-color: #2b87c3;
+}
+
+.yellow-page {
+	background-color: #f1c40f;
+}
