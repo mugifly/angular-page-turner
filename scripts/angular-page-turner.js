@@ -38,10 +38,42 @@ angular.module('PageTurner', [])
 	 * @param  {Integer} page_id ID of the page
 	 */
 	service.openPage = function (page_id) {
+
 		$rootScope.$broadcast('ANGULAR_PAGE_TURNER', {
 			cmd: 'openPage',
 			pageId: page_id
 		});
+
+	};
+
+
+	/**
+	 * Change the page to previous
+	 */
+	service.openPrevPage = function () {
+
+		if (service.pageId <= 0) return;
+
+		$rootScope.$broadcast('ANGULAR_PAGE_TURNER', {
+			cmd: 'openPage',
+			pageId: service.pageId - 2
+		});
+
+	};
+
+
+	/**
+	 * Change the page to next
+	 */
+	service.openNextPage = function () {
+
+		if (service.numOfPages - 1 <= service.pageId) return;
+
+		$rootScope.$broadcast('ANGULAR_PAGE_TURNER', {
+			cmd: 'openPage',
+			pageId: service.pageId + 1
+		});
+
 	};
 
 

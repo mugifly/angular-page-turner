@@ -14,11 +14,35 @@ angular.module('ExampleApp', ['PageTurner'])
 	 */
 	vm.addExamplePage = function () {
 
-		vm.numOfPages = PageTurner.getNumOfPages() - 1;
+		vm.numOfPages = PageTurner.getNumOfPages();
 
 		PageTurner.addPage({
 			template: '<h1>' + vm.numOfPages + 'th page</h1>'
 		});
+
+	};
+
+
+	/**
+	 * Open the previous page
+	 */
+	vm.openPrevPage = function () {
+
+		PageTurner.openPrevPage();
+		vm.pageId = PageTurner.getPageId();
+		vm.numOfPages = PageTurner.getNumOfPages() - 1;
+
+	};
+
+
+	/**
+	 * Open the next page
+	 */
+	vm.openNextPage = function () {
+
+		PageTurner.openNextPage();
+		vm.pageId = PageTurner.getPageId();
+		vm.numOfPages = PageTurner.getNumOfPages() - 1;
 
 	};
 
