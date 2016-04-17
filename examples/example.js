@@ -2,7 +2,8 @@
 
 angular.module('ExampleApp', ['PageTurner'])
 
-.controller('ExampleController', ['PageTurner', function (PageTurner) {
+.controller('ExampleController', ['$log', 'PageTurner',
+function ($log, PageTurner) {
 
 	var vm = this;
 	vm.numOfPages = PageTurner.numOfPages - 1;
@@ -41,7 +42,6 @@ angular.module('ExampleApp', ['PageTurner'])
 	vm.openNextPage = function () {
 
 		PageTurner.openNextPage();
-		vm.pageId = PageTurner.getPageId();
 		vm.numOfPages = PageTurner.getNumOfPages() - 1;
 
 	};
@@ -56,6 +56,17 @@ angular.module('ExampleApp', ['PageTurner'])
 		vm.pageId = Math.floor(Math.random() * vm.numOfPages);
 
 		PageTurner.openPage(vm.pageId);
+
+	};
+
+
+	/**
+	 * Event handler - Page changed
+	 * @param  {Integer} page_id ID of the page
+	 */
+	vm.onPageChanged = function (page_id) {
+
+		$log.debug('Page changed!', page_id);
 
 	};
 

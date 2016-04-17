@@ -107,15 +107,23 @@ angular.module('PageTurner', [])
 .directive('pageTurner', ['$timeout', 'PageTurner',
 function ($timeout, PageTurner) { // Inject the PageTurner service
 
-	var PAGE_CHANGE_ANIMATION_SEC = 0.5;
+	// Default values
+	var PAGE_CHANGE_DELAY_SEC = 0.5;
 
+
+	// Directive
 	return {
 
 		// Define as Element or Attribute or Class
-		restrict: 'C',
+		restrict: 'CA',
 
 		// Include the children
 		transclude: false,
+
+		// Make a separated scope
+		scope: {
+			ptOnPageChanged: '&' // pt-on-page-changed attribute is function
+		},
 
 		// Controller
 		controller: ['$scope', function ($scope) {
@@ -158,15 +166,21 @@ function ($timeout, PageTurner) { // Inject the PageTurner service
 						$scope.internalMethods.drawPages(false);
 					}
 
-					if (current_page == page_id){
+					if (current_page == page_id){ // Done
 						PageTurner.pageId = current_page;
 						$scope.currentPageId = current_page;
+
+						if ($scope.ptOnPageChanged) {
+							// Call the callback
+							$scope.ptOnPageChanged({ pageId: current_page });
+						}
+
 						return;
 					}
 
 					$timeout(function () {
 						jumpPage(page_id);
-					}, 1000);
+					}, $scope.options.pageChangeDelaySec * 1000);
 
 				};
 
@@ -195,9 +209,20 @@ function ($timeout, PageTurner) { // Inject the PageTurner service
 		// Initialization function
 		link: function (scope, elem, attrs, ctrl) {
 
-			var options = {
-				pageChangeAnimationSec: PAGE_CHANGE_ANIMATION_SEC
+			// Options
+
+			if (attrs.ptIsEnabledChangeOnClick != null && attrs.ptIsEnabledChangeOnClick == 'false') {
+				attrs.ptIsEnabledChangeOnClick = false;
+			} else {
+				attrs.ptIsEnabledChangeOnClick = true;
+			}
+
+			scope.options = {
+				pageChangeDelaySec: attrs.ptPageChangeDelaySec || PAGE_CHANGE_DELAY_SEC,
+				isEnabledChangeOnClick: attrs.ptIsEnabledChangeOnClick
 			};
+
+			// ----
 
 			var $container = angular.element(elem[0]);
 			var $pages = $container.children('.page');
@@ -302,12 +327,14 @@ function ($timeout, PageTurner) { // Inject the PageTurner service
 
 						$page.data('pageId', page_id);
 
-						$page.bind('click', function() {
+						if (scope.options.isEnabledChangeOnClick) {
+							$page.bind('click', function() {
 
-							var $elem = angular.element(this);
-							scope.internalMethods.onPageClicked($elem);
+								var $elem = angular.element(this);
+								scope.internalMethods.onPageClicked($elem);
 
-						});
+							});
+						}
 					}
 
 					page_id++;
@@ -318,7 +345,7 @@ function ($timeout, PageTurner) { // Inject the PageTurner service
 
 					angular.forEach($pages, function (page_elem) {
 						var $page = angular.element(page_elem);
-						$page.css('transition', 'all ' + options.pageChangeAnimationSec + 's linear');
+						$page.css('transition', 'all ' + scope.options.pageChangeDelaySec + 's linear');
 					});
 
 				}, 100);
@@ -351,11 +378,7 @@ function ($timeout, PageTurner) { // Inject the PageTurner service
 
 			scope.internalMethods.drawPages(true);
 
-		},
-
-
-		// Make a separated scope
-		scope: true
+		}
 
 	};
 
