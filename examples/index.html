@@ -18,11 +18,19 @@
 		<!---->
 
 	</head>
-	<body ng-app="ExampleApp" ng-controller="ExampleCtrl as example">
+	<body ng-app="ExampleApp" ng-controller="ExampleController as example">
 
 		<h1>angular-page-turner</h1>
 
-		<button ng-click="addExamplePage()">Add page</button>
+		<p>
+			Page:
+			{{example.pageId}} / {{example.numOfPages}}
+		</p>
+
+		<p>
+			<button ng-click="example.addExamplePage()">Add page</button>
+			<button ng-click="example.openRandomPage()">Open random</button>
+		</p>
 
 		<div class="page-turner">
 

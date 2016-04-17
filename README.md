@@ -13,5 +13,5 @@ A simple page turner library for AngularJS v1.
 
 ```
 The MIT License (MIT).
-Copyright (c) 2016 [Masanori Ohgita](https://github.com/mugifly).
+Copyright (c) 2016 Masanori Ohgita.
 ```

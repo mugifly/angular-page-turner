@@ -8,7 +8,72 @@
 
 angular.module('PageTurner', [])
 
-.directive('pageTurner', ['$timeout', function ($timeout) {
+
+/**
+ * Service for manipulate the directive from the controller of user's app
+ */
+
+ .factory('PageTurner', ['$rootScope', function($rootScope) {
+
+	var service = {
+		numOfPages: 0,
+		pageId: 0
+	};
+
+
+	/**
+	 * Add the page
+	 * @return {Integer} ID of the new page
+	 */
+	service.addPage = function (args) {
+		$rootScope.$broadcast('ANGULAR_PAGE_TURNER', {
+			cmd: 'addPage',
+			template: args.template
+		});
+	};
+
+
+	/**
+	 * Change the page
+	 * @param  {Integer} page_id ID of the page
+	 */
+	service.openPage = function (page_id) {
+		$rootScope.$broadcast('ANGULAR_PAGE_TURNER', {
+			cmd: 'openPage',
+			pageId: page_id
+		});
+	};
+
+
+	/**
+	 * Get the id of the current page
+	 * @return  {Integer} ID of page
+	 */
+	service.getPageId = function () {
+		return this.pageId;
+	};
+
+
+	/**
+	 * Get the number of the pages
+	 * @return  {Integer} Number of the pages
+	 */
+	service.getNumOfPages = function () {
+		return this.numOfPages;
+	};
+
+
+	return service;
+
+}])
+
+
+/**
+ * Directive for using on template
+ */
+
+.directive('pageTurner', ['$timeout', 'PageTurner',
+function ($timeout, PageTurner) { // Inject the PageTurner service
 
 	var PAGE_CHANGE_ANIMATION_SEC = 0.5;
 
@@ -26,7 +91,14 @@ angular.module('PageTurner', [])
 			$scope.internalMethods = {};
 
 
-			$scope.addPage = function () {
+			/**
+			 * Add the new page
+			 * @param {String} template Template of the page
+			 */
+			$scope.addPage = function (template) {
+
+				$scope.internalMethods.addPage(template);
+				$scope.internalMethods.drawPages(true);
 
 			};
 
@@ -34,14 +106,59 @@ angular.module('PageTurner', [])
 			 * Change the current page
 			 * @param {Integer} page_id ID of the page
 			 */
-			$scope.setPage = function (page_id) {
+			$scope.openPage = function (page_id) {
 
-				$scope.currentPageId = page_id;
-				$scope.internalMethods.drawPages(false);
+				if (page_id % 2 != 0) {
+					page_id = page_id + 1;
+				}
+
+				var jumpPage = function(page_id) {
+
+					var current_page = $scope.currentPageId;
+
+					if (current_page < page_id) {
+						current_page += 2;
+						$scope.currentPageId = current_page;
+						$scope.internalMethods.drawPages(false);
+					} else if (current_page > page_id) {
+						current_page -= 2;
+						$scope.currentPageId = current_page;
+						$scope.internalMethods.drawPages(false);
+					}
+
+					if (current_page == page_id){
+						PageTurner.pageId = current_page;
+						$scope.currentPageId = current_page;
+						return;
+					}
+
+					$timeout(function () {
+						jumpPage(page_id);
+					}, 1000);
+
+				};
+
+				jumpPage(page_id);
 
 			};
 
+
+			// ----
+
+
+			$scope.$on('ANGULAR_PAGE_TURNER', function(event, args) {
+
+				if (args.cmd == 'addPage') {
+					$scope.addPage(args.template);
+				} else if (args.cmd == 'openPage') {
+					$scope.openPage(args.pageId);
+				}
+
+			});
+
+
 		}],
+
 
 		// Initialization function
 		link: function (scope, elem, attrs, ctrl) {
@@ -50,12 +167,26 @@ angular.module('PageTurner', [])
 				pageChangeAnimationSec: PAGE_CHANGE_ANIMATION_SEC
 			};
 
-			var $elem = angular.element(elem[0]);
-			var $pages = $elem.children('.page');
+			var $container = angular.element(elem[0]);
+			var $pages = $container.children('.page');
 
 			scope.currentPageId = 0;
 
 			// ----
+
+
+			/**
+			 * Add the new page
+			 * @param  {String} template Template of the page
+			 */
+			scope.internalMethods.addPage = function(template) {
+
+				var $page = angular.element('<div/>');
+				$page.html(template);
+				$page.addClass('page');
+				$container.append($page);
+
+			};
 
 
 			/**
@@ -64,7 +195,12 @@ angular.module('PageTurner', [])
 			 */
 			scope.internalMethods.drawPages = function(is_initial) {
 
-				var page_id = 0, num_of_pages = $pages.length;
+				$pages = $container.children('.page');
+
+				var num_of_pages = $pages.length;
+				PageTurner.numOfPages = num_of_pages;
+
+				var page_id = 0;
 				angular.forEach($pages, function (page_elem) {
 
 					var $page = angular.element(page_elem);
@@ -174,7 +310,7 @@ angular.module('PageTurner', [])
 					next_page_id = page_id + 2;
 				}
 
-				scope.setPage(next_page_id);
+				scope.openPage(next_page_id);
 
 			};
 
@@ -185,13 +321,12 @@ angular.module('PageTurner', [])
 
 		},
 
-		// Make a scope
-		scope: {
-			addPage: '&'
-		}
+
+		// Make a separated scope
+		scope: true
 
 	};
-	
+
 }])
 
 ;
