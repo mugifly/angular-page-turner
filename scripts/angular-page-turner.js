@@ -26,9 +26,16 @@ angular.module('PageTurner', [])
 	 * @return {Integer} ID of the new page
 	 */
 	service.addPage = function (args) {
+
+		var class_names = [];
+		if (args.classNames != null) {
+			class_names = args.classNames.split(/ /);
+		}
+
 		$rootScope.$broadcast('ANGULAR_PAGE_TURNER', {
 			cmd: 'addPage',
-			template: args.template
+			template: args.template,
+			classNames: class_names
 		});
 	};
 
@@ -135,9 +142,9 @@ function ($timeout, PageTurner) { // Inject the PageTurner service
 			 * Add the new page
 			 * @param {String} template Template of the page
 			 */
-			$scope.addPage = function (template) {
+			$scope.addPage = function (template, class_names) {
 
-				$scope.internalMethods.addPage(template);
+				$scope.internalMethods.addPage(template, class_names);
 				$scope.internalMethods.drawPages(true);
 
 			};
@@ -195,7 +202,7 @@ function ($timeout, PageTurner) { // Inject the PageTurner service
 			$scope.$on('ANGULAR_PAGE_TURNER', function(event, args) {
 
 				if (args.cmd == 'addPage') {
-					$scope.addPage(args.template);
+					$scope.addPage(args.template, args.classNames);
 				} else if (args.cmd == 'openPage') {
 					$scope.openPage(args.pageId);
 				}
@@ -235,12 +242,18 @@ function ($timeout, PageTurner) { // Inject the PageTurner service
 			/**
 			 * Add the new page
 			 * @param  {String} template Template of the page
+			 * @param  {Array} class_names  Class names
 			 */
-			scope.internalMethods.addPage = function(template) {
+			scope.internalMethods.addPage = function(template, class_names) {
 
 				var $page = angular.element('<div/>');
 				$page.html(template);
 				$page.addClass('page');
+				if (class_names != null) {
+					for (var i = 0, l = class_names.length; i < l; i++) {
+						$page.addClass(class_names[i]);
+					}
+				}
 				$container.append($page);
 
 			};
