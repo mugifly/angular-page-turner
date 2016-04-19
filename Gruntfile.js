@@ -12,6 +12,17 @@ module.exports = function(grunt) {
 			]
 		},
 
+		// Testing
+		karma: {
+			unit: {
+				configFile: 'karma.conf.js'
+			},
+			unitAtOnce: {
+				configFile: 'karma.conf.js',
+				singleRun: true
+			}
+		},
+
 		// Sync the manifest for bower.json
 		sync: {
 			all: {
@@ -25,10 +36,12 @@ module.exports = function(grunt) {
 
 	// Load the modules
 	grunt.loadNpmTasks('gruntify-eslint'); // eslint
+	grunt.loadNpmTasks('grunt-karma'); // karma
 	grunt.loadNpmTasks('grunt-npm2bower-sync'); // sync
 
 	// Register the tasks
-	grunt.registerTask('test', ['eslint']);
+	grunt.registerTask('dev', ['eslint', 'karma:unit']);
+	grunt.registerTask('test', ['eslint', 'karma:unitAtOnce']);
 	grunt.registerTask('default', ['sync', 'test']);
 
 };

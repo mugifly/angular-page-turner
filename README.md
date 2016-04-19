@@ -8,6 +8,10 @@ A simple page turner library for AngularJS v1.
 
 	$ bower install angular-page-turner
 
+## Example
+
+See [examples](https://github.com/mugifly/angular-page-turner/tree/master/examples) directory.
+
 ## Note
 
 * Support for AngularJS v2 is under consideration.

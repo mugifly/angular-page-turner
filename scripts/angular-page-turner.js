@@ -159,6 +159,8 @@ function ($timeout, PageTurner) { // Inject the PageTurner service
 					page_id = page_id + 1;
 				}
 
+				if (PageTurner.numOfPages < page_id) return;
+
 				var jumpPage = function(page_id) {
 
 					var current_page = $scope.currentPageId;
