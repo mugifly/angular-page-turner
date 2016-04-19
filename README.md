@@ -3,6 +3,7 @@
 A simple page turner library for AngularJS v1.
 
 [![Bower](https://img.shields.io/bower/v/angular-page-turner.svg?maxAge=2592000?style=plastic)](http://bower.io/search/?q=angular-page-turner)
+[![Build Status](https://travis-ci.org/mugifly/angular-page-turner.svg?branch=master)](https://travis-ci.org/mugifly/angular-page-turner)
 
 ## Installation
 
