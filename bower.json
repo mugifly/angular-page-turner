@@ -17,6 +17,7 @@
   "homepage": "https://github.com/mugifly/angular-page-turner",
   "ignore": [
     "**/.*",
+    "package.json",
     "node_modules",
     "bower_components",
     "test",
