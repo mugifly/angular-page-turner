@@ -1,6 +1,6 @@
 {
   "name": "angular-page-turner",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A simple page turner library for AngularJS v1",
   "main": "scripts/angular-page-turner.js",
   "directories": {
